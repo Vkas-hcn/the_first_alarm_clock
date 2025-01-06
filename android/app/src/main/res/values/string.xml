@@ -2,4 +2,7 @@
 <resources>
     <string name="facebook_app_id">3616318175247400</string>
     <string name="facebook_client_token">f32f6738ce6c9886e0243adb45035418</string>
+    <string name="fb_login_protocol_scheme">fb3616318175247400</string>
+    <string name="app_name">Concentration Clock</string>
+
 </resources>

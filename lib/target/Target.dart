@@ -510,7 +510,6 @@ class _TargetScreenState extends State<TargetScreen>
                                         ),
                                       ),
                                     ),
-
                                     Expanded(
                                       flex:4,
                                       child: Container(

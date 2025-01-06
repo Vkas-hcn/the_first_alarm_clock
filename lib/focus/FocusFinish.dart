@@ -89,11 +89,11 @@ class _FocusFinishScreenState extends State<FocusFinishScreen>
   }
 
   void backRestartFocus() async {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  (MainApp(selectedIndex: widget.taskId.isEmpty ? 0 : 1))));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                (MainApp(selectedIndex: widget.taskId.isEmpty ? 0 : 1))));
   }
 
   void jumpToFR(bool isFocus) {
@@ -134,7 +134,7 @@ class _FocusFinishScreenState extends State<FocusFinishScreen>
                 const SizedBox(width: 20),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pop();
+                    backRestartFocus();
                   },
                   child: SizedBox(
                     width: 32,

@@ -69,6 +69,8 @@ class _FocusRestScreenState extends State<FocusRestScreen>
   @override
   void initState() {
     super.initState();
+    print("initState---ffffff=${isPortrait}");
+
     setDjsTime();
     setNowTime();
     Future.delayed(Duration.zero, () {
@@ -252,6 +254,11 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                 )))
         .then((value) {
       print("pageToFinish-fanhui=${isFinish}===${isRestSuccess}");
+      if (isPortrait) {
+        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+      } else {
+        SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+      }
       if (isFinish) {
         setNowTime();
       } else {
@@ -279,6 +286,12 @@ class _FocusRestScreenState extends State<FocusRestScreen>
           setState(() {
             _showControls = !_showControls;
           });
+        },
+        onLongPress: () {
+          _startProgress(true);
+        },
+        onLongPressEnd: (details) {
+          _startProgress(false);
         },
         child: _isLoading
             ? Center(
@@ -979,20 +992,25 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   height: 203,
                   child: Image.asset('assets/img/ic_line_shu.webp'),
                 ),
-              if (showProgress)
-                Container(
-                  width: 287,
-                  padding: EdgeInsets.only(bottom: skinInt == 2 ? 12 : 0),
-                  child: ProgressBar(
-                    progress: _progress,
-                    // Set initial progress here
-                    height: 12,
-                    borderRadius: 6,
-                    progressColor:
-                        skinInt != 3 ? Color(0xFFF7AC1E) : Color(0xFF5DB3FF),
-                    bgImagePath: skinInt != 3
-                        ? 'assets/img/icon_pro.webp'
-                        : 'assets/img/bg_pro_3.webp',
+                Visibility(
+                  visible: _showControls,
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                  child: Container(
+                    width: 287,
+                    padding: EdgeInsets.only(bottom: skinInt == 2 ? 12 : 0),
+                    child: ProgressBar(
+                      progress: _progress,
+                      // Set initial progress here
+                      height: 12,
+                      borderRadius: 6,
+                      progressColor:
+                          skinInt != 3 ? Color(0xFFF7AC1E) : Color(0xFF5DB3FF),
+                      bgImagePath: skinInt != 3
+                          ? 'assets/img/icon_pro.webp'
+                          : 'assets/img/bg_pro_3.webp',
+                    ),
                   ),
                 ),
             ],
