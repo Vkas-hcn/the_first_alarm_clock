@@ -371,131 +371,57 @@ class _TargetDetailScreenState extends State<TargetDetailScreen>
                         ),
                         if (widget.taskBean.userTime >=
                             (widget.taskBean.totalTime * 60))
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                flex:3,
-                                child: Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16,
-                                      bottom: 19,
-                                      left: 8,
-                                      right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_g.webp'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  child: SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: Image.asset(
-                                        'assets/img/ic_finish_sm.webp'),
-                                  ),
-                                ),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 12),
+                            padding: const EdgeInsets.only(
+                                top: 16,
+                                bottom: 19,
+                                left: 8,
+                                right: 8),
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(8)),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                    'assets/img/bg_target_g.webp'),
+                                fit: BoxFit.fill,
                               ),
-                              Expanded(
-                                flex:4,
-                                child: Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16,
-                                      bottom: 19,
-                                      left: 8,
-                                      right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_g.webp'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Congratulations, this goal is complete!',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFFFFD757),
-                                    ),
-                                  ),
-                                ),
+                            ),
+                            child: const Text(
+                              'Congratulations, this goal is complete!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFFFFD757),
                               ),
-                            ],
+                            ),
                           ),
                         if (TimerUtils.calculateDateDifference(widget.taskBean.deadData) <= 0)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                flex:3,
-                                child: Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16,
-                                      bottom: 19,
-                                      left: 8,
-                                      right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_r.webp'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  child: SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: Image.asset(
-                                        'assets/img/ic_unfinish_sm.webp'),
-                                  ),
-                                ),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 12),
+                            padding: const EdgeInsets.only(
+                                top: 16, bottom: 19, left: 8, right: 8),
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                    'assets/img/bg_target_r.webp'),
+                                fit: BoxFit.fill,
                               ),
-                              Expanded(
-                                flex:4,
-                                child: Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16, bottom: 19, left: 8, right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_r.webp'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'The deadline has passed, and you did not complete the goal.',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFFFFD757),
-                                    ),
-                                  ),
-                                ),
+                            ),
+                            child: const Text(
+                              'The deadline has passed, and you did not complete the goal.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFFFFD757),
                               ),
-                            ],
+                            ),
                           ),
                       ],
                     ),
