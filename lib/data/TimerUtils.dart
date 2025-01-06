@@ -165,8 +165,8 @@ class TimerUtils {
     return hours * 3600 + minutes * 60 + seconds;
   }
 
-  static int timeStringToTimestamp2(int baseMinutes,
-      String hoursData, String minutesData, String secondsData) {
+  static int timeStringToTimestamp2(int baseMinutes, String hoursData,
+      String minutesData, String secondsData) {
     int parsedHours = int.tryParse(hoursData) ?? 0;
     int parsedMinutes = int.tryParse(minutesData) ?? 0;
     int parsedSeconds = int.tryParse(secondsData) ?? 0;
@@ -220,6 +220,22 @@ class TimerUtils {
     Duration difference = now.difference(inputTime);
 
     // 返回天数部分
+    return difference.inDays;
+  }
+
+  static int calculateDateDifference(String inputDate) {
+    // 当前日期，仅保留日期部分（时分秒设为 00:00:00）
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+
+    // 解析输入日期，仅保留日期部分
+    DateTime parsedDate = DateFormat('yyyy-MM-dd').parse(inputDate);
+    DateTime inputDay = DateTime(parsedDate.year, parsedDate.month, parsedDate.day);
+
+    // 计算日期差
+    Duration difference = inputDay.difference(today);
+
+    // 返回间隔天数
     return difference.inDays;
   }
 }

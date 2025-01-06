@@ -35,9 +35,9 @@ class _SliderExampleState extends State<SliderExample> {
 
   void setMinMaxTIme() {
     setState(() {
-      minTime = widget.jiShiState == 1 ? 15 : 3;
+      // minTime = widget.jiShiState == 1 ? 15 : 3;
       print("widget.jiShiState=${widget.jiShiState}");
-      // minTime = widget.jiShiState == 1 ? 1 : 1;
+      minTime = widget.jiShiState == 1 ? 1 : 1;
       print("minTime=${minTime}");
 
       maxTime = widget.jiShiState != 2 ? 120 : 30;

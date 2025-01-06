@@ -7,26 +7,37 @@ import 'package:the_first_alarm_clock/target/Target.dart';
 import 'data/TaskBean.dart';
 
 class MainApp extends StatelessWidget {
+  final int selectedIndex;
+  const MainApp({
+    super.key,
+    required this.selectedIndex,
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MainPage(),
+      body: MainPage(selectedIndex: selectedIndex),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
+  final int selectedIndex;
+  const MainPage({
+    super.key,
+    required this.selectedIndex,
+  });
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
   late final List<Widget> _pages;
+   int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex= widget.selectedIndex;
     _pages = [
        Home(onTap: _onItemTapped),
       const Target(),

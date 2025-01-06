@@ -66,7 +66,7 @@ class _StartScreenState extends State<StartScreen>
         context,
         MaterialPageRoute(
             builder: (context) =>
-            ( MainApp() )),
+            ( MainApp(selectedIndex: 0,) )),
             (route) => route == null);
   }
 

@@ -320,7 +320,7 @@ class _TargetDetailScreenState extends State<TargetDetailScreen>
                                       ),
                                       const SizedBox(height: 28),
                                       Text(
-                                        '${(taskBeanThis.deadline) - TimerUtils.calculateDaysSince(taskBeanThis.id)} days',
+                                        '${TimerUtils.calculateDateDifference(taskBeanThis.deadData)} days',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Color(0xFFFFD757),

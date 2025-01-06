@@ -46,7 +46,17 @@ class _MyHomePageState extends State<MyHomePage> {
       pageToHome();
     });
   }
+  String getDateAfterDays(int days) {
+    // 获取当前日期
+    DateTime currentDate = DateTime.now();
 
+    // 当前日期加上指定天数
+    DateTime newDate = currentDate.add(Duration(days: days));
+
+    // 格式化日期
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(newDate);
+  }
   void setDefaultData() async {
     List<TaskBean> tasks = await TaskBean.loadTasks();
 
@@ -57,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         focusTime: 25,
         restTime: 5,
         totalTime: 500,
-        deadline: 60,
+        deadData: getDateAfterDays(60),
         userTime: 0,
       );
       tasks.add(task);
@@ -92,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       focusTime: 25,
       restTime: 5,
       totalTime: 0,
-      deadline: 60,
+      deadData: getDateAfterDays(60),
       userTime: 0,
     );
     tasksFast.add(taskFast);

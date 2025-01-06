@@ -53,17 +53,18 @@ class _AddTargetScreenState extends State<AddTargetScreen>
   final FocusNode _nameFocusNodeTime = FocusNode();
   final FocusNode _nameFocusNodeName = FocusNode();
 
-  int deadlineDays = 1;
+  String deadlineDate = '';
 
   @override
   void initState() {
     super.initState();
+    formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     if (widget.taskBean != null) {
       _nameEditingController.text = widget.taskBean!.name;
       focusTime = widget.taskBean!.focusTime;
       restTime = widget.taskBean!.restTime;
       _timeEditingController.text = widget.taskBean!.totalTime.toString();
-      selectedDate = DateTime.now().add(Duration(days: widget.taskBean!.deadline));
+      selectedDate = DateTime.parse(widget.taskBean!.deadData);
       taskDayBeans = widget.taskBean!.taskDayBean;
     }
     getTaskListData();
@@ -87,6 +88,8 @@ class _AddTargetScreenState extends State<AddTargetScreen>
   }
 
   void showDiaLogFocusSeting() {
+    _nameFocusNodeTime.unfocus();
+    _nameFocusNodeName.unfocus();
     showBottomSetTimeInput(context, 1, (value) {
       print("focusTime====${value}");
       setState(() {
@@ -96,6 +99,8 @@ class _AddTargetScreenState extends State<AddTargetScreen>
   }
 
   void showDiaLogRestSetting() {
+    _nameFocusNodeTime.unfocus();
+    _nameFocusNodeName.unfocus();
     showBottomSetTimeInput(context, 2, (value) {
       print("restTime====${value}");
       setState(() {
@@ -134,12 +139,14 @@ class _AddTargetScreenState extends State<AddTargetScreen>
         totalTime: _timeEditingController.text.isEmpty
             ? 0
             : int.parse(_timeEditingController.text),
-        deadline: deadlineDays,
+        deadData: deadlineDate == "" ? formattedDate : deadlineDate,
         userTime: widget.taskBean!.userTime,
       );
+      print("deadData----=====------>${deadlineDate == ""}");
+
+      print("deadData---------->${deadlineDate == "" ? formattedDate : deadlineDate}");
       await TaskBean.updateTaskById(widget.taskBean!.id, updatedTaskBean);
     } else {
-      // 创建新任务
       TaskBean taskBean = TaskBean(
         taskDayBean: [],
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -149,7 +156,7 @@ class _AddTargetScreenState extends State<AddTargetScreen>
         totalTime: _timeEditingController.text.isEmpty
             ? 0
             : int.parse(_timeEditingController.text),
-        deadline: deadlineDays,
+        deadData: deadlineDate == "" ? formattedDate : deadlineDate,
         userTime: 0,
       );
       await TaskBean.addTask(taskBean);
@@ -963,9 +970,11 @@ class _AddTargetScreenState extends State<AddTargetScreen>
   Future<void> selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().add(const Duration(days: 1)), // 修改: 将初始日期设置为明天
+      initialDate: DateTime.now().add(const Duration(days: 1)),
+      // 修改: 将初始日期设置为明天
       // 初始日期为明天
-      firstDate: DateTime.now().add(const Duration(days: 1)), // 修改: 将最早可选日期设置为明天
+      firstDate: DateTime.now().add(const Duration(days: 1)),
+      // 修改: 将最早可选日期设置为明天
       // 将最早可选日期设置为明天，禁用今天的日期
       lastDate: DateTime(2100),
       // 设置一个合理的未来日期
@@ -997,10 +1006,12 @@ class _AddTargetScreenState extends State<AddTargetScreen>
 
         // 计算相差的天数
         final int differenceInDays = selectedDate.difference(today).inDays;
+        formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
 
-        print("pickedDate: $pickedDate");
+        print("pickedDate: $pickedDate=====${formattedDate}");
         print("Difference in days: $differenceInDays");
-        deadlineDays = differenceInDays;
+        //2025-01-11 00:00:00.000转换成2025-01-11
+        deadlineDate = formattedDate;
       });
     }
   }

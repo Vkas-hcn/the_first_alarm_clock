@@ -50,14 +50,15 @@ class _TargetScreenState extends State<TargetScreen>
         jsonEncode(taskBeans.map((task) => task.toJson()).toList());
     List<TaskBean> taskBeansFast = await TaskBean.loadTasks(isFast: true);
     final String jsonDataFast =
-    jsonEncode(taskBeansFast.map((task) => task.toJson()).toList());
+        jsonEncode(taskBeansFast.map((task) => task.toJson()).toList());
     print("jsonData=${jsonData}");
 
     print("jsonDataFast=${jsonDataFast}");
     totalTotalTime = (TaskBean.sumTotalTime(taskBeans)).toDouble();
-    totalUserTime = (TaskBean.sumUserTime(taskBeans)/60.0);
+    totalUserTime = (TaskBean.sumUserTime(taskBeans) / 60.0);
     if (totalTotalTime > 0) {
-      userTimeRatio = (totalUserTime / (totalTotalTime)*100).toStringAsFixed(2);
+      userTimeRatio =
+          (totalUserTime / (totalTotalTime) * 100).toStringAsFixed(2);
     } else {
       userTimeRatio = "0.0";
     }
@@ -149,14 +150,14 @@ class _TargetScreenState extends State<TargetScreen>
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(horizontal: 12),
                   padding: const EdgeInsets.only(
-                      top: 16, bottom: 20, left: 20, right: 20),
+                      top: 16, bottom: 20, left: 15, right: 15),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/img/bg_target_1.webp"),
                       fit: BoxFit.fill,
                     ),
                   ),
-                  child:  Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,7 +172,7 @@ class _TargetScreenState extends State<TargetScreen>
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'sf',
-                              fontSize: 20,
+                              fontSize: 18,
                               color: Color(0xFFFFD757),
                             ),
                           ),
@@ -185,26 +186,28 @@ class _TargetScreenState extends State<TargetScreen>
                           ),
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            '${userTimeRatio}%',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'sf',
-                              fontSize: 20,
-                              color: Color(0xFFFFD757),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              '${userTimeRatio}%',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'sf',
+                                fontSize: 20,
+                                color: Color(0xFFFFD757),
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${totalUserTime.toStringAsFixed(2)}/${totalTotalTime}mins',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFFFFD757),
+                            Text(
+                              '${totalUserTime.toStringAsFixed(2)}/${totalTotalTime}mins',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFFFFD757),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -255,22 +258,28 @@ class _TargetScreenState extends State<TargetScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      taskBean.name,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontFamily: 'sf',
-                                        fontSize: 16,
-                                        color: Color(0xFFFFDF7A),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        taskBean.name,
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          fontFamily: 'sf',
+                                          fontSize: 14,
+                                          color: Color(0xFFFFDF7A),
+                                        ),
                                       ),
                                     ),
-                                    Text(
-                                      "${getTaskProData(taskBeans.indexOf(taskBean))}%",
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontFamily: 'sf',
-                                        fontSize: 16,
-                                        color: Color(0xFFFFDF7A),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        "${getTaskProData(taskBeans.indexOf(taskBean))}%",
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(
+                                          fontFamily: 'sf',
+                                          fontSize: 16,
+                                          color: Color(0xFFFFDF7A),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -352,7 +361,7 @@ class _TargetScreenState extends State<TargetScreen>
                                             ),
                                             const SizedBox(height: 28),
                                             Text(
-                                              '${(taskBean.deadline) - TimerUtils.calculateDaysSince(taskBean.id)} days',
+                                              '${(TimerUtils.calculateDateDifference(taskBean.deadData))} days',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xFFFFD757),
@@ -365,7 +374,7 @@ class _TargetScreenState extends State<TargetScreen>
                                   ],
                                 ),
                               ),
-                              if (taskBean.deadline != 0 &&
+                              if (TimerUtils.calculateDateDifference(taskBean.deadData) > 0 &&
                                   taskBean.userTime < (taskBean.totalTime * 60))
                                 GestureDetector(
                                   onTap: () {
@@ -404,55 +413,132 @@ class _TargetScreenState extends State<TargetScreen>
                                 ),
                               if (taskBean.userTime >=
                                   (taskBean.totalTime * 60))
-                                Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16, bottom: 19, left: 8, right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_g.webp'),
-                                      fit: BoxFit.fill,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      flex:3,
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 12),
+                                        padding: const EdgeInsets.only(
+                                            top: 16,
+                                            bottom: 19,
+                                            left: 8,
+                                            right: 8),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/img/bg_target_g.webp'),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        child: SizedBox(
+                                          width: 44,
+                                          height: 44,
+                                          child: Image.asset(
+                                              'assets/img/ic_finish_sm.webp'),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: const Text(
-                                    'Congratulations, this goal is complete!',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFFFFD757),
+                                    Expanded(
+                                      flex:4,
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 12),
+                                        padding: const EdgeInsets.only(
+                                            top: 16,
+                                            bottom: 19,
+                                            left: 8,
+                                            right: 8),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/img/bg_target_g.webp'),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Congratulations, this goal is complete!',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xFFFFD757),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              if (taskBean.deadline == 0 &&
-                                  taskBean.userTime < (taskBean.totalTime * 60))
-                                Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 12),
-                                  padding: const EdgeInsets.only(
-                                      top: 16, bottom: 19, left: 8, right: 8),
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/img/bg_target_r.webp'),
-                                      fit: BoxFit.fill,
+                              if (TimerUtils.calculateDateDifference(taskBean.deadData) <= 0)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      flex:3,
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 12),
+                                        padding: const EdgeInsets.only(
+                                            top: 16,
+                                            bottom: 19,
+                                            left: 8,
+                                            right: 8),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/img/bg_target_r.webp'),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        child: SizedBox(
+                                          width: 44,
+                                          height: 44,
+                                          child: Image.asset(
+                                              'assets/img/ic_unfinish_sm.webp'),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: const Text(
-                                    'The deadline has passed, and you did not complete the goal.',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFFFFD757),
+
+                                    Expanded(
+                                      flex:4,
+                                      child: Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 12),
+                                        padding: const EdgeInsets.only(
+                                            top: 16, bottom: 19, left: 8, right: 8),
+                                        decoration: const BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.all(Radius.circular(8)),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/img/bg_target_r.webp'),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'The deadline has passed, and you did not complete the goal.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xFFFFD757),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                             ],
                           ),

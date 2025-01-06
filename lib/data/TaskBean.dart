@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 import 'package:the_first_alarm_clock/data/LocalStorage.dart';
+import 'package:the_first_alarm_clock/data/TimerUtils.dart';
 
 class TaskBean {
   String id;
@@ -9,7 +10,7 @@ class TaskBean {
   int focusTime;
   int restTime;
   int totalTime;
-  int deadline;
+  String deadData;
   int userTime;
   List<TaskDayBean> taskDayBean;
 
@@ -19,7 +20,7 @@ class TaskBean {
     required this.focusTime,
     required this.restTime,
     required this.totalTime,
-    required this.deadline,
+    required this.deadData,
     required this.userTime,
     this.taskDayBean = const [],
   });
@@ -31,7 +32,7 @@ class TaskBean {
       focusTime: json['focusTime'] as int,
       restTime: json['restTime'] as int,
       totalTime: json['totalTime'] as int,
-      deadline: json['deadline'] as int,
+      deadData: json['deadData'] as String,
       userTime: json['userTime'] as int,
       taskDayBean: (json['taskDayBean'] as List<dynamic>?)
               ?.map((e) => TaskDayBean.fromJson(e))
@@ -47,7 +48,7 @@ class TaskBean {
       'focusTime': focusTime,
       'restTime': restTime,
       'totalTime': totalTime,
-      'deadline': deadline,
+      'deadData': deadData,
       'userTime': userTime,
       'taskDayBean': taskDayBean.map((e) => e.toJson()).toList(),
     };
@@ -75,18 +76,20 @@ class TaskBean {
 
       // 计算剩余天数并排序
       tasks.sort((a, b) {
-        DateTime now = DateTime.now();
-        DateTime deadlineA = now.add(Duration(days: a.deadline));
-        DateTime deadlineB = now.add(Duration(days: b.deadline));
+        DateTime deadlineA = DateTime.parse(a.deadData);
+        DateTime deadlineB = DateTime.parse(b.deadData);
+        print("deadlineA=${deadlineA}");
+        print("deadlineB=${deadlineB}");
 
-        int remainingDaysA = deadlineA.difference(now).inDays;
-        int remainingDaysB = deadlineB.difference(now).inDays;
-
+        int remainingDaysA = TimerUtils.calculateDateDifference(a.deadData);
+        int remainingDaysB = TimerUtils.calculateDateDifference(b.deadData);
+        print("remainingDaysA=${remainingDaysA}");
+        print("remainingDaysB=${remainingDaysB}");
         // 判断任务是否已完成或已延期
         bool isCompletedOrDelayedA =
-            remainingDaysA < 0 || a.userTime >= (a.totalTime * 60);
+            remainingDaysA <= 0 || a.userTime >= (a.totalTime * 60);
         bool isCompletedOrDelayedB =
-            remainingDaysB < 0 || b.userTime >= (b.totalTime * 60);
+            remainingDaysB <= 0 || b.userTime >= (b.totalTime * 60);
 
         if (isCompletedOrDelayedA && !isCompletedOrDelayedB) {
           return 1; // 已完成或已延期的任务排在后面
@@ -174,7 +177,7 @@ class TaskBean {
         focusTime: 0,
         restTime: 0,
         totalTime: 0,
-        deadline: 0,
+        deadData: '',
         userTime: 0,
         taskDayBean: [],
       );
@@ -185,7 +188,7 @@ class TaskBean {
         focusTime: 0,
         restTime: 0,
         totalTime: 0,
-        deadline: 0,
+        deadData: '',
         userTime: 0,
         taskDayBean: [],
       );
@@ -263,6 +266,7 @@ class TaskBean {
         ? ((totalUserTime + taskBeansFast[0].userTime) /
             ((totalTotalTime + taskBeansFast[0].totalTime) * 60))
         : 0.0;
+    print("taskBeansFast[0].userTime=${taskBeansFast[0].userTime}");
     return {
       'totalTotalTime': totalTotalTime + taskBeansFast[0].totalTime,
       'totalUserTime': totalUserTime + taskBeansFast[0].userTime,

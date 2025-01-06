@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:share_plus/share_plus.dart';
 
+import '../MainApp.dart';
 import '../data/LocalStorage.dart';
 import 'FocusRest.dart';
 
@@ -88,22 +89,11 @@ class _FocusFinishScreenState extends State<FocusFinishScreen>
   }
 
   void backRestartFocus() async {
-    // ss
-    //   Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => FocusRest(
-    //               isFocus: true,
-    //               timeData: widget.timeData,
-    //               taskId: widget.taskId)),
-    //       (route) => route == null);
-    Navigator.of(context).pop();
-
-    // Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //     builder: (context) => FocusRest(
-    //         isFocus: true,
-    //         timeData: widget.timeData,
-    //         taskId: widget.taskId)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  (MainApp(selectedIndex: widget.taskId.isEmpty ? 0 : 1))));
   }
 
   void jumpToFR(bool isFocus) {
@@ -122,7 +112,7 @@ class _FocusFinishScreenState extends State<FocusFinishScreen>
     return Scaffold(
         body: WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop();
+        backRestartFocus();
         return false;
       },
       child: Container(

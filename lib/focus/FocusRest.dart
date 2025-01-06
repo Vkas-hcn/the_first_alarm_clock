@@ -91,6 +91,7 @@ class _FocusRestScreenState extends State<FocusRestScreen>
     super.dispose();
     _timeUpdateTimer?.cancel();
     timerUtils?.stop();
+    showProgress = false;
   }
 
   void sySkinData() async {
@@ -120,7 +121,7 @@ class _FocusRestScreenState extends State<FocusRestScreen>
     timerUtils = TimerUtils(
       initialMinutes: timeDjs,
       onTick: (hours, minutes, seconds) {
-        print("当前时间: $hours:$minutes:$seconds");
+        // print("当前时间: $hours:$minutes:$seconds");
         setState(() {
           hoursData = hours;
           minutesData = minutes;
@@ -164,14 +165,18 @@ class _FocusRestScreenState extends State<FocusRestScreen>
 
   void _startProgress(bool isLongPress) {
     setState(() {
+      print("object=_startProgress${isLongPress}");
       showProgress = isLongPress;
     });
     if (isLongPress) {
       showSetProgress();
+    } else {
+      _timerProgress?.cancel();
     }
   }
 
   void showSetProgress() {
+    _timerProgress?.cancel();
     const int totalDuration = 3000;
     const int updateInterval = 50;
     const int totalUpdates = totalDuration ~/ updateInterval;
@@ -235,6 +240,7 @@ class _FocusRestScreenState extends State<FocusRestScreen>
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     String resultTimeData = await setUserTimeData();
     print("object----pageToFinish=${resultTimeData}");
+    showProgress = false;
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (context) => FocusFinish(
@@ -279,6 +285,7 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                 child: CircularProgressIndicator(), // 显示加载动画
               )
             : Container(
+                width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -323,8 +330,12 @@ class _FocusRestScreenState extends State<FocusRestScreen>
           mainAxisSize: MainAxisSize.max,
           children: [
             const SizedBox(width: 16),
-            if (_showControls)
-              Text(
+            Visibility(
+              visible: _showControls,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: Text(
                 _formattedTime,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
@@ -340,12 +351,17 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ],
                 ),
               ),
+            ),
             Spacer(),
-            if (_showControls)
-              GestureDetector(
-                onTap: () {
-                  switchingSkin();
-                },
+            GestureDetector(
+              onTap: () {
+                switchingSkin();
+              },
+              child: Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: SizedBox(
                   width: 32,
                   height: 32,
@@ -356,12 +372,22 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ),
                 ),
               ),
-            if (_showControls) SizedBox(width: 20),
-            if (_showControls)
-              GestureDetector(
-                onTap: () {
-                  switchingScreens();
-                },
+            ),
+            Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: SizedBox(width: 20)),
+            GestureDetector(
+              onTap: () {
+                switchingScreens();
+              },
+              child: Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: SizedBox(
                   width: 32,
                   height: 32,
@@ -372,7 +398,13 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ),
                 ),
               ),
-            if (_showControls) SizedBox(width: 20),
+            ),
+            Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: SizedBox(width: 20)),
           ],
         ),
         const SizedBox(height: 40),
@@ -571,9 +603,11 @@ class _FocusRestScreenState extends State<FocusRestScreen>
           padding: const EdgeInsets.symmetric(vertical: 9),
           child: GestureDetector(
             onLongPress: () {
+              print("object-----按下");
               _startProgress(true);
             },
             onLongPressEnd: (details) {
+              print("object-----抬起");
               _startProgress(false);
             },
             child: Container(
@@ -608,9 +642,13 @@ class _FocusRestScreenState extends State<FocusRestScreen>
           ),
         ),
         const SizedBox(height: 32),
-        if (showProgress)
-          Padding(
-            padding: const EdgeInsets.only(left: 44, right: 44),
+        Padding(
+          padding: const EdgeInsets.only(left: 44, right: 44),
+          child: Visibility(
+            visible: showProgress,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
             child: ProgressBar(
               progress: _progress,
               // Set initial progress here
@@ -623,7 +661,13 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   : 'assets/img/bg_pro_3.webp',
             ),
           ),
-        if (showProgress) const SizedBox(height: 32),
+        ),
+        Visibility(
+            visible: showProgress,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: const SizedBox(height: 32)),
       ],
     );
   }
@@ -640,8 +684,12 @@ class _FocusRestScreenState extends State<FocusRestScreen>
           mainAxisSize: MainAxisSize.max,
           children: [
             const SizedBox(width: 16),
-            if (_showControls)
-              Expanded(
+            Expanded(
+              child: Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: Text(
                   _formattedTime,
                   style: TextStyle(
@@ -659,7 +707,8 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ),
                 ),
               ),
-            if (!_showControls) Spacer(),
+            ),
+            Spacer(),
             Expanded(
               child: Container(
                 width: 293,
@@ -690,11 +739,15 @@ class _FocusRestScreenState extends State<FocusRestScreen>
               ),
             ),
             Expanded(flex: 1, child: Container()),
-            if (_showControls)
-              GestureDetector(
-                onTap: () {
-                  switchingSkin();
-                },
+            GestureDetector(
+              onTap: () {
+                switchingSkin();
+              },
+              child: Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: SizedBox(
                   width: 32,
                   height: 32,
@@ -705,12 +758,22 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ),
                 ),
               ),
-            if (_showControls) const SizedBox(width: 20),
-            if (_showControls)
-              GestureDetector(
-                onTap: () {
-                  switchingScreens();
-                },
+            ),
+            Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: const SizedBox(width: 20)),
+            GestureDetector(
+              onTap: () {
+                switchingScreens();
+              },
+              child: Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: SizedBox(
                   width: 32,
                   height: 32,
@@ -721,7 +784,13 @@ class _FocusRestScreenState extends State<FocusRestScreen>
                   ),
                 ),
               ),
-            if (_showControls) const SizedBox(width: 20),
+            ),
+            Visibility(
+                visible: _showControls,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: SizedBox(width: 20)),
           ],
         ),
         const SizedBox(height: 29),
